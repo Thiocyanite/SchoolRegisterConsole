@@ -17,7 +17,5 @@ namespace SchoolRegister
         void SetClassFormTutor() { throw new NotImplementedException(); }
         void ChangeSbsData() { throw new NotImplementedException(); }
 
-    }
-
 }
 }

@@ -1,44 +1,81 @@
 ﻿using System;
 using System.Linq.Expressions;
-using System.Data.SqlTypes;
 using System.Data.Linq;
 using System.Data.SqlClient;
-using System.Data;
+using MySql.Data.MySqlClient;
 
 namespace SchoolRegister
 {
     class Program
     {
+        private static MySqlConnection sqlConnection;
+        private static MySqlDataReader dataReader;
+        private static Person user;
+
         //this function should ask user about his/her id
         //to log in as a valid type of user (student, parent, teacher)
         //then open this type's window
         //and wait till log out
+
         static void Main(string[] args)
         {
+            String connectionString = "Server=192.168.64.2;  database=Dziennik; Uid=Julka; pwd=Abby";
+            sqlConnection = new MySqlConnection(connectionString);
+            MySqlCommand command = sqlConnection.CreateCommand(); 
+
             try
-            {
+           {
+                string pesel= "98062904751";
+               sqlConnection.Open();
+               command.CommandText = $"select * from osoba where pesel='{pesel}'";
+               dataReader = command.ExecuteReader();
 
-                using (SqlConnection sqlConnection = new SqlConnection(@"Data Source=admlab2.cs.put.poznan.pl,1521,tcp;
-                                                    Initial Catalog = dblab02_students.cs.put.poznan.pl; Persist Security Info=True;
-                                                    User ID = secret; Password = top secret;"))
+                if (dataReader.Read())
                 {
-                    sqlConnection.Open();
-                    SqlCommand command = sqlConnection.CreateCommand();
-                    command.CommandText = "SELECT * FROM pracownicy";
-                    SqlDataReader dataReader = command.ExecuteReader();
-                    while (dataReader.Read())
-                        Console.WriteLine(dataReader["nazwisko"].ToString());
+                    Console.WriteLine("Witaj " + dataReader[1]);
+                    command.CommandText = $"select * from nauczyciel where pesel='{pesel}'";
                     dataReader.Close();
-                    sqlConnection.Close();
+                    dataReader = command.ExecuteReader();
+                    if (dataReader.Read())
+                    {
+                        Console.WriteLine("Belfer gotowy?");
+                        user = new Teacher();
+                    }
+                    else
+                    {
+                        command.CommandText = $"select * from opiekun where pesel='{pesel}'";
+                        dataReader.Close();
+                        dataReader = command.ExecuteReader();
+                        if (dataReader.Read())
+                        {
+                            Console.WriteLine("Opiekun gotowy?");
+                            user = new Parent();
+                        }
+                        else {
+                            command.CommandText = $"select * from uczen where pesel='{pesel}'";
+                            dataReader.Close();
+                            dataReader = command.ExecuteReader();
+                            if (dataReader.Read())
+                            {
+                                Console.WriteLine("uczen gotowy?");
+                                user = new Teacher();
+                            }
+                            else user = new Person();
+                        }
+                    }
                 }
-            }
-             catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
+               dataReader.Close();
+               
+           }
+            catch(Exception ex)
+           {
+               Console.WriteLine(ex.Message);
+           }
+           
             finally
-            { Console.WriteLine("I'll be a big, strong app!"); }
+            {
+                sqlConnection.Close();
+                Console.WriteLine("I'll be a big, strong app!"); }
         }
     }
 }
