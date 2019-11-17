@@ -1,11 +1,12 @@
 ﻿using System;
+using MySql.Data.MySqlClient;
 namespace SchoolRegister
 {
     public class Headmaster : Teacher
     {
         //real boss in this world
         //she/he can even fire a teacher
-        public Headmaster()
+        public Headmaster(string pesel, MySqlCommand cmd, MySqlDataReader reader) : base(pesel, cmd, reader)
         {
         }
         void CreateClass() { throw new NotImplementedException(); }
