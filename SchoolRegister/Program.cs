@@ -20,10 +20,10 @@ namespace SchoolRegister
 
         static void Main(string[] args)
         {
-            String connectionString = "Server=192.168.64.2;  database=Dziennik; Uid= ; pwd=";
+            String connectionString = "Server=192.168.64.2;  database=Dziennik; Uid=top secret ; pwd=top secret";
             sqlConnection = new MySqlConnection(connectionString);
-             command = sqlConnection.CreateCommand(); 
-
+            command = sqlConnection.CreateCommand();
+            command.Connection = sqlConnection;
             try
            {
                 sqlConnection.Open();
@@ -44,7 +44,7 @@ namespace SchoolRegister
 
         static void LogInUser()
         {
-            string pesel = "98062904751";
+            string pesel = "34023006731";
             command.CommandText = $"select * from osoba where pesel='{pesel}'";
             dataReader = command.ExecuteReader();
 
