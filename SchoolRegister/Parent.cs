@@ -27,18 +27,34 @@ namespace SchoolRegister
             command.CommandText = $"UPDATE opiekun SET dochod={money} WHERE pesel={PESEL}";
         }
 
-        //TODO:
-        //show all notes and then count average in app
+
         void ShowMyChildsNotes() 
         {
             foreach (var child in Dzieci)
             {
-                command.CommandText =
-                $"select imie, przedmiot_nazwa, AVG(ocena) from(ocena JOIN uczen ON uczen_pesel = uczen.pesel) JOIN osoba ON uczen.pesel=osoba.pesel WHERE osoba.pesel = {child} GROUP by przedmiot_nazwa";
+                command.CommandText = $"SELECT imie FROM osoba WHERE pesel={child}";
                 dataReader = command.ExecuteReader();
-                while (dataReader.Read())
-                    Console.WriteLine(dataReader[0] + " " + dataReader[1] + " średnia: " + dataReader[2]);
+                Console.WriteLine(dataReader[0]);
                 dataReader.Close();
+                var subject = "";
+                var sum = 0;
+                var num = 0;
+                command.CommandText = $"SELECT ocena, kategoria_oceny_nazwa, przedmiot_nazwa FROM ocena WHERE uczen_pesel={child} ORDER BY przedmiot_nazwa";
+                dataReader=command.ExecuteReader();
+                while (dataReader.Read()) {
+                    if (dataReader[2].ToString() != subject)
+                    {
+                        Console.WriteLine("Średnia: " + sum / num);
+                        sum = 0;
+                        num = 0;
+                        subject = dataReader[2].ToString();
+                        Console.WriteLine("---" + subject + "---");
+                    }
+                    Console.WriteLine(dataReader[1] + " : " + dataReader[0]);
+                    sum += int.Parse(dataReader[0].ToString());
+                    num++;
+                }
+                Console.WriteLine("Średnia: " + sum / num); //last average will not be shown in a loop
             }
         }
 
