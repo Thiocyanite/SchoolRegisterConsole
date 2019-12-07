@@ -13,8 +13,10 @@ namespace SchoolRegister
         public Person(string pesel, MySqlCommand cmd, MySqlDataReader reader)
         {
             PESEL = pesel; command = cmd; dataReader = reader;
-            if (!dataReader.IsClosed) dataReader.Close();
+            if (!dataReader.IsClosed)
+                dataReader.Close();
         }
+
         public virtual void ChangeMyData() {
             //I think that pesel and names shouldn't be changed
             var phoneNum = "666666666";
@@ -24,10 +26,11 @@ namespace SchoolRegister
             dataReader = command.ExecuteReader();
             dataReader.Close();
         }
+
         public virtual void mainLoop()
         {
-            ChangeMyData();
         }
+
         public void ShowAllClassMarks() {
             command.CommandText =
             $"SELECT klasa.rocznik, klasa.literka, przedmiot_nazwa, avg(ocena) " +
@@ -35,12 +38,9 @@ namespace SchoolRegister
             $"GROUP by klasa.rocznik, klasa.literka, przedmiot_nazwa";
             dataReader = command.ExecuteReader();
             while (dataReader.Read())
-            {
                 Console.WriteLine("Klasa " + dataReader[0] + dataReader[1] + " przedmiot: " + dataReader[2] + " średnia: " + dataReader[3]);
-            }
             dataReader.Close();
         }
         
-
     }
 }

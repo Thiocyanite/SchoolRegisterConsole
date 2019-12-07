@@ -34,36 +34,38 @@ namespace SchoolRegister
             {
                 command.CommandText = $"SELECT imie FROM osoba WHERE pesel={child}";
                 dataReader = command.ExecuteReader();
+                dataReader.Read();
                 Console.WriteLine(dataReader[0]);
                 dataReader.Close();
                 var subject = "";
                 var sum = 0;
                 var num = 0;
-                command.CommandText = $"SELECT ocena, kategoria_oceny_nazwa, przedmiot_nazwa FROM ocena WHERE uczen_pesel={child} ORDER BY przedmiot_nazwa";
+                command.CommandText = $"select przedmiot_nazwa, ocena, opis, kategoria_oceny_nazwa, waga from (ocena JOIN uczen ON uczen_pesel = pesel) JOIN kategoria on kategoria_oceny_nazwa=nazwa WHERE uczen_pesel={child} ORDER BY przedmiot_nazwa";
                 dataReader=command.ExecuteReader();
-                while (dataReader.Read()) {
-                    if (dataReader[2].ToString() != subject)
+                Console.WriteLine("a");
+                while (dataReader.Read())
+                {
+                    if (dataReader[0].ToString() != subject)
                     {
-                        Console.WriteLine("Średnia: " + sum / num);
-                        sum = 0;
-                        num = 0;
-                        subject = dataReader[2].ToString();
-                        Console.WriteLine("---" + subject + "---");
+                        if (sum > 0)
+                        {
+                            Console.WriteLine("średnia " + sum / num);
+                            sum = 0;
+                            num = 0;
+                        }
+                        Console.WriteLine(dataReader[0]);
                     }
-                    Console.WriteLine(dataReader[1] + " : " + dataReader[0]);
-                    sum += int.Parse(dataReader[0].ToString());
-                    num++;
+                    Console.WriteLine(dataReader[3] + ": " + dataReader[1] + " " + dataReader[2]);
+                    sum += int.Parse(dataReader[1].ToString()) * int.Parse(dataReader[4].ToString());
+                    num += int.Parse(dataReader[4].ToString());
                 }
                 Console.WriteLine("Średnia: " + sum / num); //last average will not be shown in a loop
+                dataReader.Close();
             }
         }
 
         public override void mainLoop()
         {
-            ShowMyChildsNotes();
-            ShowMyChildWarnings();
-            ShowMyChildPresance();
-            ShowAllClassMarks();
         }
 
         void ShowMyChildWarnings()
@@ -78,6 +80,7 @@ namespace SchoolRegister
                 dataReader.Close();
             }
         }
+
         void ShowMyChildPresance()
         {
             foreach (var child in Dzieci)
@@ -90,6 +93,7 @@ namespace SchoolRegister
                 dataReader.Close();
             }
         }
+
         void ChangeMyChildsData()
         {
             foreach (var child in Dzieci)
@@ -97,7 +101,7 @@ namespace SchoolRegister
                 var phoneNum = "777777777";
                 var email = "mychildsemail@gmail.com";
                 var home = "Poznań";
-                command.CommandText = $"UPDATE osoba SET nr_telefonu='{phoneNum}', adres_email='{email}', adres_zamieszkania='{home}'";
+                command.CommandText = $"UPDATE osoba SET nr_telefonu='{phoneNum}', adres_email='{email}', adres_zamieszkania='{home}' WHERE pesel={child}";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
             }

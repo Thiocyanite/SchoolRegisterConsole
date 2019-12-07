@@ -9,6 +9,22 @@ namespace SchoolRegister
         public Headmaster(string pesel, MySqlCommand cmd, MySqlDataReader reader) : base(pesel, cmd, reader)
         {
         }
+
+        public override void mainLoop()
+        {
+            ShowAllClassMarks();
+        }
+
+        void EditClassProfile()
+        {
+            var classLetter = 'A';
+            var classYear = 2035;
+            var newProfile = "chemiczno-fizyczny";
+            command.CommandText = $"UPDATE klasa SET profil='{newProfile}' WHERE literka='{classLetter}' and rocznik='{classYear}'";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+        }
+
         void CreateClass()
         { var classYear = 2035;
             var classLetter = 'A';
@@ -18,6 +34,7 @@ namespace SchoolRegister
             dataReader = command.ExecuteReader();
             dataReader.Close();
         }
+
         void AddStudent()
         { var pesel = "98012806821";
             AddPerson(pesel);
@@ -38,6 +55,7 @@ namespace SchoolRegister
             dataReader=command.ExecuteReader();
             dataReader.Close();
         }
+
         void AddLegalGuardian() {
             var pesel = "69030920181";
             AddPerson(pesel);
@@ -46,22 +64,27 @@ namespace SchoolRegister
             dataReader = command.ExecuteReader();
             dataReader.Close();
         }
+
         void AddPerson(string pesel)
         {
             var names = "Abby";
             var lastName = "Westie";
-            command.CommandText = $"INSERT INTO osoba(pesel, imie, nazwisko) VALUES({pesel},'{names}','{lastName}')";
+            var phoneNum = "999999999";
+            var mail = "mail@mail.com";
+            var home = "Ponań";
+            command.CommandText = $"INSERT INTO osoba(pesel, imie, nazwisko, nr_telefonu, adres_email, adres_zamieszkania) VALUES('{pesel}','{names}','{lastName}',{phoneNum},'{mail}','{home}')";
             dataReader = command.ExecuteReader();
             dataReader.Close();
-
         }
+
         void AddSubject()
         {
             var name = "Matematyka";
-            command.CommandText = $"INSERT INTO przedmiot VALUES ('{name}')";
+            command.CommandText = $"INSERT INTO Przedmiot VALUES ('{name}')";
             dataReader = command.ExecuteReader();
             dataReader.Close();
         }
+
         void AddLesson()
         {
             var roomFloor = 1;
@@ -69,13 +92,13 @@ namespace SchoolRegister
             var classYear = 2030;
             var classLetter = 'A';
             var subject = "Fizyka";
-            var hourOfUnit = 8;
+            var hourOfUnit = "8";
             var dayOfUnit = "piątek";
-            command.CommandText = $"INSERT INTO lekcja VALUES ({roomFloor},{roomNumber},{classYear},'{classLetter}','{subject}',{hourOfUnit},'{dayOfUnit}')";
+            command.CommandText = $"INSERT INTO lekcja VALUES ({roomFloor},{roomNumber},{classYear},'{classLetter}','{subject}',{hourOfUnit},'{dayOfUnit}')"; //I have no idea why it has problems with subject
             dataReader = command.ExecuteReader();
             dataReader.Close();
-            
         }
+
         void AddClassroom()
         {
             var floor = 2;
@@ -85,6 +108,16 @@ namespace SchoolRegister
             dataReader = command.ExecuteReader();
             dataReader.Close();
         }
+
+        void AddUnit()
+        {
+            var day = "piątek";
+            var hour = "8";
+            command.CommandText = $"INSERT INTO jednostka VALUES ({hour},'{day}')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+        }
+
         void AddSafekeeping()
         {
             var child = "98012969271";
@@ -93,6 +126,7 @@ namespace SchoolRegister
             dataReader=command.ExecuteReader();
             dataReader.Close();
         }
+
         void SetClassFormTutor()
         { var newFormTutor = "34023006731";
             var classYear = 2030;
@@ -101,6 +135,7 @@ namespace SchoolRegister
             dataReader = command.ExecuteReader();
             dataReader.Close();
         }
+
         void ChangesTeacherState()
         {
             var pesel = "34023006731";
