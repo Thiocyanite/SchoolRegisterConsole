@@ -59,8 +59,7 @@ namespace SchoolRegister
 
         public override void mainLoop()
         {
-            ShowMyNotes();
-
+            
         }
 
     }

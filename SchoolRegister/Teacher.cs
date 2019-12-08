@@ -69,7 +69,7 @@ namespace SchoolRegister
             var classLetter = "A";
             var hourOfUnit = "8";
             var dayOfUnit = "środa";
-            command.CommandText = $"INSERT INTO obecnosc VALUES('{date}',25042907972,'{presanceType}', {classNum}, '{classLetter}', {hourOfUnit}, '{dayOfUnit}')";
+            command.CommandText = $"INSERT INTO obecnosc VALUES('{date}',{pesel},'{presanceType}', {classNum}, '{classLetter}', {hourOfUnit}, '{dayOfUnit}')";
             dataReader = command.ExecuteReader();
             dataReader.Close();
         }
