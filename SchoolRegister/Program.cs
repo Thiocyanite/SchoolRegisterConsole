@@ -25,8 +25,9 @@ namespace SchoolRegister
             try
             {
                 sqlConnection.Open();
-                LogInAs();
-                user.mainLoop();
+                DBCreator creator = new DBCreator(sqlConnection, command);
+                creator.DeleteOldBase();
+                creator.CreateNewBase();
             }
             catch (Exception ex)
             {
@@ -35,7 +36,6 @@ namespace SchoolRegister
 
             finally
             {
-                dataReader.Close();
                 sqlConnection.Close();
                 Console.WriteLine("I'll be a big, strong app!");
             }

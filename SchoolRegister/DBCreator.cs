@@ -9,17 +9,12 @@ namespace SchoolRegister
         private static MySqlConnection sqlConnection;
         private static MySqlDataReader dataReader;
         private static MySqlCommand command;
-        public DBCreator(MySqlConnection connection, MySqlDataReader reader, MySqlCommand com)
+        public DBCreator(MySqlConnection connection, MySqlCommand com)
         {
             sqlConnection = connection;
-            dataReader = reader;
             command = com;
-            if (!dataReader.IsClosed)
-            {
-                dataReader.Close();
-            }
-        }
 
+        }
 
         void setHeadmaster()
         {
@@ -31,13 +26,13 @@ namespace SchoolRegister
             throw new NotImplementedException();
         }
 
-        void DeleteOldBase()
+        public void DeleteOldBase()
         {
-            command.CommandText = $"EXEC sp_msforeachtable \"ALTER TABLE ? NOCHECK CONSTRAINT all\"";
+            command.CommandText = $"SELECT CONCAT('DROP TABLE IF EXISTS `', TABLE_SCHEMA, '`.`', TABLE_NAME, '`;') FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'Dziennik'";
             dataReader = command.ExecuteReader();
         }
 
-        void CreateNewBase()
+        public void CreateNewBase()
         {
             try
             {
