@@ -25,10 +25,10 @@ namespace SchoolRegister
             try
             {
                 sqlConnection.Open();
-                DeleteOldBase();
+                //DeleteOldBase();
                 CreateNewBase();
-                LogInAs();
-                user.mainLoop();
+                //LogInAs();
+                //user.mainLoop();
             }
             catch (Exception ex)
             {
@@ -37,7 +37,6 @@ namespace SchoolRegister
 
             finally
             {
-                dataReader.Close();
                 sqlConnection.Close();
                 Console.WriteLine("I'll be a big, strong app!");
             }
@@ -93,71 +92,71 @@ namespace SchoolRegister
         {
             try
             {
-                command.CommandText = "CREATE TABLE dane_osobowe(  pesel NUMBER(11) NOT NULL,  imie  VARCHAR2(20) NOT NULL,  nazwisko  VARCHAR2(50) NOT NULL,  adres_zamieszkania  VARCHAR2(100),  numer_telefonu NUMBER(9),  email   VARCHAR2(50))";
+                command.CommandText = "CREATE TABLE dane_osobowe(  pesel NUMERIC(11) NOT NULL,  imie  CHAR(20) NOT NULL,  nazwisko  CHAR(50) NOT NULL,  adres_zamieszkania  CHAR(100),  numer_telefonu NUMERIC(9),  email   CHAR(50))";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
+                
                 command.CommandText = "ALTER TABLE dane_osobowe ADD CONSTRAINT dane_osobowe_pk PRIMARY KEY ( pesel )";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
-                command.CommandText = "CREATE TABLE jednostka (godzina NUMBER(2) NOT NULL,  minuta  NUMBER(2) NOT NULL)";
+                
+                command.CommandText = "CREATE TABLE jednostka (godzina NUMERIC(2) NOT NULL,  minuta  NUMERIC(2) NOT NULL)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
+                
                 command.CommandText = "ALTER TABLE jednostka ADD CONSTRAINT jednostka_pk PRIMARY KEY ( godzina,minuta ) ";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
-                command.CommandText = "CREATE TABLE kategoria_oceny(  nazwa  VARCHAR2(20) NOT NULL,  waga  NUMBER(1) NOT NULL) ";
+                
+                command.CommandText = "CREATE TABLE kategoria_oceny(  nazwa  CHAR(20) NOT NULL,  waga  NUMERIC(1) NOT NULL) ";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
+              
                 command.CommandText = "ALTER TABLE kategoria_oceny ADD CONSTRAINT kategoria_oceny_pk PRIMARY KEY ( nazwa )";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
-                command.CommandText = "CREATE TABLE klasa (rocznik NUMBER(4) NOT NULL,literka  VARCHAR2(1) NOT NULL, nauczyciel_dane_osobowe_pesel NUMBER(11),  profil_nazwa  VARCHAR2(50) NOT NULL) ";
+              
+                command.CommandText = "CREATE TABLE klasa (rocznik NUMERIC(4) NOT NULL,literka  CHAR(1) NOT NULL, nauczyciel_dane_osobowe_pesel NUMERIC(11),  profil_nazwa  CHAR(50) NOT NULL) ";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
+              
                 command.CommandText = "ALTER TABLE klasa ADD CONSTRAINT klasa_pk PRIMARY KEY ( rocznik, literka ) ";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
-                command.CommandText = "CREATE TABLE lekcja (  dzien_tygodnia NUMBER(1) NOT NULL,jednostka_godzina  NUMBER(2) NOT NULL,jednostka_minuta NUMBER(2) NOT NULL,klasa_rocznik  NUMBER(4) NOT NULL,klasa_literka   VARCHAR2(1) NOT NULL,sala_pietro  NUMBER(1) NOT NULL,sala_numer NUMBER(2) NOT NULL,przedmiot_nazwa_przedmiotu  VARCHAR2(20) NOT NULL) ";
+              
+                command.CommandText = "CREATE TABLE lekcja (  dzien_tygodnia NUMERIC(1) NOT NULL,jednostka_godzina  NUMERIC(2) NOT NULL,jednostka_minuta NUMERIC(2) NOT NULL,klasa_rocznik  NUMERIC(4) NOT NULL,klasa_literka   CHAR(1) NOT NULL,sala_pietro  NUMERIC(1) NOT NULL,sala_numer NUMERIC(2) NOT NULL,przedmiot_nazwa_przedmiotu  CHAR(20) NOT NULL) ";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
+              
                 command.CommandText = "ALTER TABLE lekcja  ADD CONSTRAINT lekcja_pk PRIMARY KEY(klasa_rocznik, jednostka_godzina, jednostka_minuta, dzien_tygodnia, klasa_literka)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
-                command.CommandText = "CREATE TABLE nauczyciel (  etat NUMBER(3, 2) NOT NULL,dane_osobowe_pesel NUMBER(11) NOT NULL)";
+              
+                command.CommandText = "CREATE TABLE nauczyciel (  etat NUMERIC(3, 2) NOT NULL,dane_osobowe_pesel NUMERIC(11) NOT NULL)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
+              
                 command.CommandText = "ALTER TABLE nauczyciel ADD CONSTRAINT nauczyciel_pk PRIMARY KEY ( dane_osobowe_pesel )";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
-                command.CommandText = "CREATE TABLE obecnosc (  data DATE NOT NULL,uczen_pesel  NUMBER(11) NOT NULL, lekcja_dzien_tygodnia  NUMBER(1) NOT NULL,lekcja_jednostka_godzina NUMBER(2) NOT NULL,lekcja_jednostka_minuta  NUMBER(2) NOT NULL,lekcja_klasa_rocznik NUMBER(4) NOT NULL,lekcja_klasa_literka  VARCHAR2(1) NOT NULL,status_nazwa  VARCHAR2(20) NOT NULL)";
+              
+                command.CommandText = "CREATE TABLE obecnosc (  data DATE NOT NULL,uczen_pesel  NUMERIC(11) NOT NULL, lekcja_dzien_tygodnia  NUMERIC(1) NOT NULL,lekcja_jednostka_godzina NUMERIC(2) NOT NULL,lekcja_jednostka_minuta  NUMERIC(2) NOT NULL,lekcja_klasa_rocznik NUMERIC(4) NOT NULL,lekcja_klasa_literka  CHAR(1) NOT NULL,status_nazwa  CHAR(20) NOT NULL)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
+              
                 command.CommandText = "ALTER TABLE obecnosc  ADD CONSTRAINT obecnosc_pk PRIMARY KEY(data,uczen_pesel,lekcja_jednostka_godzina,lekcja_jednostka_minuta,lekcja_dzien_tygodnia) ";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
-                command.CommandText = "CREATE TABLE ocena (  id INTEGER NOT NULL,ocena NUMBER(1) NOT NULL,data  DATE NOT NULL,  opis  VARCHAR2(300) NOT NULL,kategoria_oceny_nazwa  VARCHAR2(20) NOT NULL,przedmiot_nazwa_przedmiotu   VARCHAR2(20) NOT NULL,uczen_dane_osobowe_pesel  NUMBER(11) NOT NULL,nauczyciel_dane_osobowe_pesel NUMBER(11) NOT NULL); ";
+              
+                command.CommandText = "CREATE TABLE ocena (  id INTEGER NOT NULL,ocena NUMERIC(1) NOT NULL,data  DATE NOT NULL,  opis  CHAR(255) NOT NULL,kategoria_oceny_nazwa  CHAR(20) NOT NULL,przedmiot_nazwa_przedmiotu   CHAR(20) NOT NULL,uczen_dane_osobowe_pesel  NUMERIC(11) NOT NULL,nauczyciel_dane_osobowe_pesel NUMERIC(11) NOT NULL); ";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
-
+              
                 command.CommandText = "ALTER TABLE ocena ADD CONSTRAINT ocena_pk PRIMARY KEY ( id )";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
-                command.CommandText = "CREATE TABLE opieka (  uczen_pesel NUMBER(11) NOT NULL,opiekun_pesel NUMBER(11) NOT NULL)";
+                command.CommandText = "CREATE TABLE opieka (  uczen_pesel NUMERIC(11) NOT NULL,opiekun_pesel NUMERIC(11) NOT NULL)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
@@ -165,7 +164,7 @@ namespace SchoolRegister
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
-                command.CommandText = "CREATE TABLE opiekun (  dochod NUMBER(10, 2) NOT NULL,  pesel  NUMBER(11) NOT NULL)";
+                command.CommandText = "CREATE TABLE opiekun (  dochod NUMERIC(10, 2) NOT NULL,  pesel  NUMERIC(11) NOT NULL)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
@@ -173,11 +172,15 @@ namespace SchoolRegister
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
+                command.CommandText = "CREATE TABLE profil (  nazwa CHAR(50) NOT NULL); ";
+                dataReader = command.ExecuteReader();
+                dataReader.Close();
+
                 command.CommandText = "ALTER TABLE profil ADD CONSTRAINT profil_pk PRIMARY KEY ( nazwa )";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
-                command.CommandText = "CREATE TABLE przedmiot (  nazwa_przedmiotu  VARCHAR2(20) NOT NULL)";
+                command.CommandText = "CREATE TABLE przedmiot (  nazwa_przedmiotu  CHAR(20) NOT NULL)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
@@ -185,7 +188,7 @@ namespace SchoolRegister
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
-                command.CommandText = "CREATE TABLE sala (  pietro NUMBER(1) NOT NULL,numer NUMBER(2) NOT NULL,liczba_miejsc NUMBER(2) NOT NULL)";
+                command.CommandText = "CREATE TABLE sala (  pietro NUMERIC(1) NOT NULL,numer NUMERIC(2) NOT NULL,liczba_miejsc NUMERIC(2) NOT NULL)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
@@ -193,7 +196,7 @@ namespace SchoolRegister
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
-                command.CommandText = "CREATE TABLE status (  nazwa  VARCHAR2(20) NOT NULL)";
+                command.CommandText = "CREATE TABLE status (  nazwa  CHAR(20) NOT NULL)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
@@ -201,7 +204,7 @@ namespace SchoolRegister
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
-                command.CommandText = "CREATE TABLE uczen (  dane_osobowe_pesel NUMBER(11) NOT NULL,  klasa_rocznik  NUMBER(4) NOT NULL,  nr_w_dzienniku NUMBER(2) NOT NULL,  klasa_literka   VARCHAR2(1) NOT NULL)";
+                command.CommandText = "CREATE TABLE uczen (  dane_osobowe_pesel NUMERIC(11) NOT NULL,  klasa_rocznik  NUMERIC(4) NOT NULL,  nr_w_dzienniku NUMERIC(2) NOT NULL,  klasa_literka   CHAR(1) NOT NULL)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
@@ -209,11 +212,14 @@ namespace SchoolRegister
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
-                command.CommandText = "CREATE TABLE uwaga (  id INTEGER NOT NULL,tresc  VARCHAR2(300) NOT NULL,puntky_do_zachowania  NUMBER(2),  uczen_dane_osobowe_pesel NUMBER(11) NOT NULL,nauczyciel_dane_osobowe_pesel NUMBER(11) NOT NULL,data  DATE)";
+                command.CommandText = "CREATE TABLE uwaga (  id INTEGER NOT NULL,tresc  CHAR(300) NOT NULL,puntky_do_zachowania  NUMERIC(2),  uczen_dane_osobowe_pesel NUMERIC(11) NOT NULL,nauczyciel_dane_osobowe_pesel NUMERIC(11) NOT NULL,data  DATE)";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
                 command.CommandText = "ALTER TABLE uwaga ADD CONSTRAINT uwaga_pk PRIMARY KEY ( id )";
+                dataReader = command.ExecuteReader();
+                dataReader.Close();
+                command.CommandText= "CREATE TABLE klasa (  rocznik NUMERIC(4) NOT NULL,  literka CHAR(1) NOT NULL,  nauczyciel_dane_osobowe_pesel NUMERIC(11),  profil_nazwa CHAR(50) NOT NULL); ";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
@@ -305,11 +311,11 @@ namespace SchoolRegister
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
-                command.CommandText = "CREATE SEQUENCE ocenaSeq AS BIGINT START WITH 1 INCREMENT BY 1";
+                command.CommandText = "CREATE OR REPLACE SEQUENCE ocenaSeq INCREMENT By 1 ";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
 
-                command.CommandText = "CREATE SEQUENCE uwagaSeq AS BIGINT START WITH 1 INCREMENT BY 1";
+                command.CommandText = "CREATE OR REPLACE SEQUENCE uwagaSeq INCREMENT By 1 ";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
             }
