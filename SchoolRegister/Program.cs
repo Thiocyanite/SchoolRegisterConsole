@@ -25,10 +25,8 @@ namespace SchoolRegister
             try
             {
                 sqlConnection.Open();
-                //DeleteOldBase();
-                CreateNewBase();
-                //LogInAs();
-                //user.mainLoop();
+                LogInAs();
+                user.mainLoop();
             }
             catch (Exception ex)
             {
@@ -45,7 +43,7 @@ namespace SchoolRegister
 
         static void DeleteOldBase()
         {
-            command.CommandText = $"SELECT CONCAT('DROP TABLE IF EXISTS `', TABLE_SCHEMA, '`.`', TABLE_NAME, '`;') FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'Dziennik'";
+            command.CommandText = $"DROP DATABASE IF EXISTS Dziennik";
             dataReader = command.ExecuteReader();
             dataReader.Close();
         }
@@ -57,31 +55,38 @@ namespace SchoolRegister
             list.Add("uczen");
             list.Add("nauczyciel");
             list.Add("opiekun");
-            var pesel = "25042907972";
+            var pesel = "666";
             var type = "uczen";
-            command.CommandText = $"select * from {type} where pesel='{pesel}'";
-            dataReader = command.ExecuteReader();
-            if (dataReader.Read())
+
+            if (pesel == "666") //special code
             {
-                if (type == "uczen")
+                command.CommandText = $"select CURRENT_DATE from dual";
+                dataReader = command.ExecuteReader();
+                user = new Headmaster("666", command, dataReader);
+            }
+
+            else
+            {
+                command.CommandText = $"select * from {type} where pesel='{pesel}'";
+                dataReader = command.ExecuteReader();
+                if (dataReader.Read())
                 {
-                    user = new Student(dataReader[0].ToString(), command, dataReader);
-                }
-                else
-                {
-                    if (type == "opiekun")
-                        user = new Parent(dataReader[0].ToString(), command, dataReader);
+                    if (type == "uczen")
+                    {
+                        user = new Student(dataReader[0].ToString(), command, dataReader);
+                    }
                     else
                     {
-                        command.CommandText = $"select * from nauczyciel where pesel='{pesel}'";
-                        dataReader.Read();
-                        if (dataReader[2].ToString() == "dyrektor")
-                            user = new Headmaster(dataReader[0].ToString(), command, dataReader);
+                        if (type == "opiekun")
+                            user = new Parent(dataReader[0].ToString(), command, dataReader);
                         else
+                        {
+                            command.CommandText = $"select * from nauczyciel where pesel='{pesel}'";
+                            dataReader.Read();
                             user = new Teacher(dataReader[0].ToString(), command, dataReader);
+                        }
                     }
                 }
-
             }
 
         }

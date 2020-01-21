@@ -12,7 +12,13 @@ namespace SchoolRegister
 
   public override void mainLoop()
   {
-  ShowAllClassMarks();
+            //AddTeacher
+            //AddProfile();
+            //CreateClass();
+            //AddSubject();
+            //AddUnit();
+            //AddClassroom();
+            AddLesson();
   }
 
   void EditClassProfile()
@@ -25,12 +31,20 @@ namespace SchoolRegister
   dataReader.Close();
   }
 
+  void AddProfile()
+        {
+            var profileName = "chemiczno-fizyczny";
+            command.CommandText = $"INSERT INTO profil VALUES ('{profileName}')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+        }
+
   void CreateClass()
   { var classYear = 2035;
   var classLetter = 'A';
-  var profile = "biologiczno-chemiczny";
-  var formTutorPesel = "34023006731";
-  command.CommandText = $"INSERT INTO klasa VALUES ({classYear},'{classLetter}','{profile}', {formTutorPesel}) ";
+  var profile = "chemiczno-fizyczny";
+  var formTutorPesel = "69030920181";
+  command.CommandText = $"INSERT INTO klasa VALUES ({classYear},'{classLetter}', {formTutorPesel},'{profile}') ";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
@@ -41,7 +55,7 @@ namespace SchoolRegister
   var classYear = 2035;
   var classLetter = "A";
   var numberInRegister = 1;
-  command.CommandText = $"INSERT INTO uczen VALUES ({pesel},{numberInRegister},{classYear},'{classLetter}')";
+  command.CommandText = $"INSERT INTO uczen VALUES ({pesel},{classYear},{numberInRegister},'{classLetter}')";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
@@ -51,7 +65,7 @@ namespace SchoolRegister
   AddPerson(pesel);
   var etat = 1;
   var status = "zatrudniony";
-  command.CommandText = $"INSERT INTO nauczyciel VALUES ({pesel},{etat},'{status})'";
+  command.CommandText = $"INSERT INTO nauczyciel VALUES ({etat},{pesel})";
   dataReader=command.ExecuteReader();
   dataReader.Close();
   }
@@ -60,7 +74,7 @@ namespace SchoolRegister
   var pesel = "69030920181";
   AddPerson(pesel);
   var dochod = 900000;
-  command.CommandText = $"INSERT INTO opiekun VALUES ({pesel}, {dochod})";
+  command.CommandText = $"INSERT INTO opiekun VALUES ({dochod},{pesel})";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
@@ -72,7 +86,7 @@ namespace SchoolRegister
   var phoneNum = "999999999";
   var mail = "mail@mail.com";
   var home = "Ponań";
-  command.CommandText = $"INSERT INTO osoba(pesel, imie, nazwisko, nr_telefonu, adres_email, adres_zamieszkania) VALUES('{pesel}','{names}','{lastName}',{phoneNum},'{mail}','{home}')";
+  command.CommandText = $"INSERT INTO dane_osobowe(pesel, imie, nazwisko, adres_zamieszkania, numer_telefonu, email) VALUES('{pesel}','{names}','{lastName}','{home}',{phoneNum},'{mail}')";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
@@ -80,7 +94,7 @@ namespace SchoolRegister
   void AddSubject()
   {
   var name = "Matematyka";
-  command.CommandText = $"INSERT INTO Przedmiot VALUES ('{name}')";
+  command.CommandText = $"INSERT INTO przedmiot VALUES ('{name}')";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
@@ -89,20 +103,21 @@ namespace SchoolRegister
   {
   var roomFloor = 1;
   var roomNumber = 2;
-  var classYear = 2030;
+  var classYear = 2035;
   var classLetter = 'A';
-  var subject = "Fizyka";
+  var subject = "Matematyka";
   var hourOfUnit = "8";
-  var dayOfUnit = "piątek";
-  command.CommandText = $"INSERT INTO lekcja VALUES ({roomFloor},{roomNumber},{classYear},'{classLetter}','{subject}',{hourOfUnit},'{dayOfUnit}')"; //I have no idea why it has problems with subject
+  var dayOfUnit = "1";
+            var minuteOfUnit = "45";
+  command.CommandText = $"INSERT INTO lekcja VALUES ('{dayOfUnit}', {hourOfUnit}, {minuteOfUnit},{classYear},'{classLetter}', {roomFloor},{roomNumber},'{subject}')";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
 
   void AddClassroom()
   {
-  var floor = 2;
-  var number = 3;
+  var floor = 1;
+  var number = 2;
   var chairs = 20;
   command.CommandText = $"INSERT INTO sala VALUES ({floor},{number},{chairs})";
   dataReader = command.ExecuteReader();
@@ -111,9 +126,9 @@ namespace SchoolRegister
 
   void AddUnit()
   {
-  var day = "piątek";
   var hour = "8";
-  command.CommandText = $"INSERT INTO jednostka VALUES ({hour},'{day}')";
+  var minute = "45";
+  command.CommandText = $"INSERT INTO jednostka VALUES ({hour},'{minute}')";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
@@ -135,17 +150,5 @@ namespace SchoolRegister
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
-
-  void ChangesTeacherState()
-  {
-  var pesel = "34023006731";
-  var etat = 2;
-  var status = "urlop ojcowski";
-  command.CommandText = $"UPDATE nauczyciel SET etat={etat}, status_zatrudnienia='{status}' WHERE pesel={pesel}";
-  dataReader=command.ExecuteReader();
-  dataReader.Close();
-  }
-
-
 }
 }

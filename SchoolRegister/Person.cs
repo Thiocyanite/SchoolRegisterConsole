@@ -22,7 +22,7 @@ namespace SchoolRegister
   var phoneNum = "666666666";
   var email = "mymail@com.pl";
   var home = " Poznań";
-  command.CommandText=$"UPDATE osoba SET nr_telefonu='{phoneNum}',adres_email='{email}',adres_zamieszkania='{home}' WHERE pesel={PESEL}";
+  command.CommandText=$"UPDATE dane_osobowe SET numer_telefonu='{phoneNum}',email='{email}',adres_zamieszkania='{home}' WHERE pesel={PESEL}";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }

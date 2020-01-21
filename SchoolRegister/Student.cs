@@ -12,7 +12,7 @@ namespace SchoolRegister
   {
   command.CommandText =
   //$"select * from kategoria";
-  $"select przedmiot_nazwa, ocena, opis, kategoria_oceny_nazwa, waga from (ocena JOIN uczen ON uczen_pesel = pesel) JOIN kategoria on kategoria_oceny_nazwa=nazwa WHERE pesel={PESEL} ORDER by przedmiot_nazwa";
+  $"select przedmiot_nazwa_przedmiotu, ocena, opis, kategoria_oceny_nazwa, waga from (ocena JOIN uczen ON uczen_dane_osobowe_pesel = dane_osobowe_pesel) JOIN kategoria on kategoria_oceny_nazwa=nazwa WHERE pesel={PESEL} ORDER by przedmiot_nazwa";
   dataReader = command.ExecuteReader();
   var subject = "";
   var sum = 0;
@@ -40,7 +40,7 @@ namespace SchoolRegister
   public void ShowMyWarnings()
   {
   command.CommandText =
-  $"SELECT tresc, puntky_do_zachowania FROM uwaga WHERE uczen_pesel = {PESEL}";
+  $"SELECT tresc, puntky_do_zachowania FROM uwaga WHERE uczen_dane_osobowe_pesel = {PESEL}";
   dataReader = command.ExecuteReader();
   while (dataReader.Read())
   Console.WriteLine(dataReader[0] + " punkty " + dataReader[1]);

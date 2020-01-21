@@ -32,7 +32,7 @@ namespace SchoolRegister
   {
   foreach (var child in Dzieci)
   {
-  command.CommandText = $"SELECT imie FROM osoba WHERE pesel={child}";
+  command.CommandText = $"SELECT imie FROM dane_osobowe WHERE pesel={child}";
   dataReader = command.ExecuteReader();
   dataReader.Read();
   Console.WriteLine(dataReader[0]);
@@ -40,7 +40,7 @@ namespace SchoolRegister
   var subject = "";
   var sum = 0;
   var num = 0;
-  command.CommandText = $"select przedmiot_nazwa, ocena, opis, kategoria_oceny_nazwa, waga from (ocena JOIN uczen ON uczen_pesel = pesel) JOIN kategoria on kategoria_oceny_nazwa=nazwa WHERE uczen_pesel={child} ORDER BY przedmiot_nazwa";
+  command.CommandText = $"select przedmiot_nazwa_przedmiotu, ocena, opis, kategoria_oceny_nazwa, waga from (ocena JOIN uczen ON uczen_dane_osobowe_pesel = dane_osobowe_pesel) JOIN kategoria_oceny on kategoria_oceny_nazwa=nazwa WHERE uczen_dane_osobowe_pesel={child} ORDER BY przedmiot_nazwa";
   dataReader=command.ExecuteReader();
   Console.WriteLine("a");
   while (dataReader.Read())
@@ -73,7 +73,7 @@ namespace SchoolRegister
   foreach (var child in Dzieci)
   {
   command.CommandText =
-  $"SELECT tresc, puntky_do_zachowania FROM uwaga WHERE uczen_pesel = { child }";
+  $"SELECT tresc, puntky_do_zachowania FROM uwaga WHERE uczen_dane_osobowe_pesel = { child }";
   dataReader = command.ExecuteReader();
   while (dataReader.Read())
   Console.WriteLine(dataReader[0] + " punkty: " + dataReader[1]);
@@ -86,7 +86,7 @@ namespace SchoolRegister
   foreach (var child in Dzieci)
   {
   command.CommandText =
-  $"SELECT data, status FROM obecnosc WHERE pesel = {child}";
+  $"SELECT data, status FROM obecnosc WHERE uczen_pesel = {child}";
   dataReader = command.ExecuteReader();
   while (dataReader.Read())
   Console.WriteLine(dataReader[0] + " był " + dataReader[1]);
@@ -101,7 +101,7 @@ namespace SchoolRegister
   var phoneNum = "777777777";
   var email = "mychildsemail@gmail.com";
   var home = "Poznań";
-  command.CommandText = $"UPDATE osoba SET nr_telefonu='{phoneNum}', adres_email='{email}', adres_zamieszkania='{home}' WHERE pesel={child}";
+  command.CommandText = $"UPDATE dane_osobowe SET numer_telefonu='{phoneNum}', email='{email}', adres_zamieszkania='{home}' WHERE pesel={child}";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
@@ -111,7 +111,7 @@ namespace SchoolRegister
   foreach (var child in Dzieci)
   {
   command.CommandText =
-  $"SELECT data, status FROM obecnosc WHERE pesel = {child} and status='nieobecny'";
+  $"SELECT data, status FROM obecnosc WHERE uczen_pesel = {child} and status='nieobecny'";
   dataReader = command.ExecuteReader();
   while (dataReader.Read())
   Console.WriteLine(dataReader[0] + " był " + dataReader[1]);
@@ -123,7 +123,7 @@ namespace SchoolRegister
   dates.Add("2019-11-27 16:11:32");
   foreach (var date in dates)
   {
-  command.CommandText = $"UPDATE obecnosc SET status='usprawiedliwiony' WHERE data={date} AND pesel={child}";
+  command.CommandText = $"UPDATE obecnosc SET status='usprawiedliwiony' WHERE data={date} AND uczen_pesel={child}";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
