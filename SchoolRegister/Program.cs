@@ -27,6 +27,7 @@ namespace SchoolRegister
                 sqlConnection.Open();
                 LogInAs();
                 user.mainLoop();
+                CreateBasicSubjects();
             }
             catch (Exception ex)
             {
@@ -91,6 +92,72 @@ namespace SchoolRegister
 
         }
 
+
+        static void PrepareDBBeforeFirstUse()
+        {
+            CreateNewBase();
+            CreateBasicSubjects();
+        }
+
+
+        static void CreateBasicSubjects()
+        {
+            command.CommandText = "INSERT into przedmiot VALUES ('Matematyka')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+         
+            command.CommandText = "INSERT into przedmiot VALUES ('Fizyka')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+         
+            command.CommandText = "INSERT into przedmiot VALUES ('Chemia')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+         
+            command.CommandText = "INSERT into przedmiot VALUES ('Informatyka')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+         
+            command.CommandText = "INSERT into przedmiot VALUES ('Biologia')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+         
+            command.CommandText = "INSERT into kategoria_oceny VALUES ('Sprawdzian',5)";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into kategoria_oceny VALUES ('Kartkówka',3)";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into kategoria_oceny VALUES ('Eksperyment',4)";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into profil VALUES ('Chemiczno-informatyczny')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into profil VALUES ('Fizyczno-informatyczny')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into profil VALUES ('Biologiczno-matematyczny')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into jednostka VALUES ('8','00')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into jednostka VALUES ('8','55')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into jednostka VALUES ('9','50')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+        }
 
 
         static void CreateNewBase()
