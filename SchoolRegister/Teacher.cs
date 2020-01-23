@@ -28,6 +28,8 @@ namespace SchoolRegister
   var name = "kartkówka niezapowiedziana";
   var weight = 5;
   command.CommandText = $"INSERT INTO kategoria_oceny VALUES ('{name}',{weight})";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
   }
 
   void AddNote()
@@ -39,12 +41,11 @@ namespace SchoolRegister
   dataReader.Close();
   var pesel = "25042907972";
   var category = "kartkówka zapowiedziana";
-  var id = 6;
   var value = 5;
   var date = "2029-06-03 15:30";
   var description = "Uczeń perfekcyjnie opanował materiał";
   var subject = "Biologia";
-  command.CommandText = $"INSERT INTO ocena VALUES({id},{value},'{date}','{description}','{category}','{subject}',{pesel},{PESEL})"; 
+  command.CommandText = $"INSERT INTO ocena VALUES(NEXTVAL(ocenaSeq),{value},'{date}','{description}','{category}','{subject}',{pesel},{PESEL})"; 
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }
@@ -54,8 +55,7 @@ namespace SchoolRegister
   var pesel = "25042907972";
   var points = -30;
   var whatDidStudentDo = "Brał udział w bójce";
-  var id = 3;
-  command.CommandText = $"INSERT INTO uwaga VALUES({id},'{whatDidStudentDo}', {points}, {PESEL}, {pesel}, CURRENT_DATE) ";
+  command.CommandText = $"INSERT INTO uwaga VALUES(NEXTVAL(uwagaSeq),'{whatDidStudentDo}', {points}, {PESEL}, {pesel}, CURRENT_DATE) ";
   dataReader = command.ExecuteReader();
   dataReader.Close();
   }

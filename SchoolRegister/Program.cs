@@ -24,10 +24,12 @@ namespace SchoolRegister
             command.Connection = sqlConnection;
             try
             {
-                sqlConnection.Open();
-                LogInAs();
-                user.mainLoop();
-                CreateBasicSubjects();
+                //sqlConnection.Open();
+                CorectnessChecker checker = new CorectnessChecker();
+                Console.WriteLine(checker.isCorrect("Orders are given to brave people"));
+
+
+
             }
             catch (Exception ex)
             {
@@ -155,6 +157,18 @@ namespace SchoolRegister
             dataReader.Close();
 
             command.CommandText = "INSERT into jednostka VALUES ('9','50')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into status VALUES ('obecny')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into jednostka VALUES ('nieobecny')";
+            dataReader = command.ExecuteReader();
+            dataReader.Close();
+
+            command.CommandText = "INSERT into jednostka VALUES ('usprawiedliwiony')";
             dataReader = command.ExecuteReader();
             dataReader.Close();
         }
@@ -388,6 +402,14 @@ namespace SchoolRegister
                 dataReader.Close();
 
                 command.CommandText = "CREATE OR REPLACE SEQUENCE uwagaSeq INCREMENT By 1 ";
+                dataReader = command.ExecuteReader();
+                dataReader.Close();
+
+                command.CommandText = "CREATE VIEW średnie_z_przedmiotow AS SELECT sum(ocena*waga)/sum(waga) AS srednia, uczen_dane_osobowe_pesel, przedmiot_nazwa_przedmiotu FROM ocena join uczen on uczen_dane_osobowe_pesel=dane_osobowe_pesel join kategoria_oceny on kategoria_oceny_nazwa=nazwa GROUP by uczen_dane_osobowe_pesel, przedmiot_nazwa_przedmiotu ";
+                dataReader = command.ExecuteReader();
+                dataReader.Close();
+
+                command.CommandText = "CREATE VIEW srednie_uczniow AS SELECT avg(srednia), imie, nazwisko, rocznik, literka FROM `średnie_z_przedmiotow` join dane_osobowe on uczen_dane_osobowe_pesel=pesel join uczen on uczen_dane_osobowe_pesel=pesel JOIN klasa on klasa_rocznik=rocznik and klasa_literka=literka GROUP By uczen_dane_osobowe_pesel";
                 dataReader = command.ExecuteReader();
                 dataReader.Close();
             }
